@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  scraper-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lego-scraper-api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    environment:
+      - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
+      - CLOUDFLARE_ACCESS_KEY_ID=${CLOUDFLARE_ACCESS_KEY_ID}
+      - CLOUDFLARE_SECRET_ACCESS_KEY=${CLOUDFLARE_SECRET_ACCESS_KEY}
+      - CLOUDFLARE_R2_BUCKET=${CLOUDFLARE_R2_BUCKET}
+      - CLOUDFLARE_DOMAIN=${CLOUDFLARE_DOMAIN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    networks:
+      - scraper-network
+
+networks:
+  scraper-network:
+    driver: bridge
